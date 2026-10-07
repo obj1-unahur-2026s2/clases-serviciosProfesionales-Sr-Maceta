@@ -1,9 +1,79 @@
-import example.pepita
+import example.*
 
-describe "group of tests for pepita" {
+describe "Test de la etapa 1" {
+    var universidadDeSanMartin
+    var universidadDeRosario
+    var universidadDeCorrientes
+    var universidadDeHurlingham
 
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
-  }
+    var juana
+    var melina
+    var rocio
+    var luciana
 
+    var nuevaEmpresa
+
+    method initialize(){
+        //Universidades
+        universidadDeSanMartin = new Universidad(
+            provincia = [buenosAires], //colocar una provincia en una lista
+            honorarios = 3500
+        )
+        universidadDeRosario = new Universidad(
+            provincia = [santaFe],  //colocar una provincia en una lista
+            honorarios = 2800
+        )
+        universidadDeCorrientes = new Universidad(
+            provincia = [corrientes],   //colocar una provincia en una lista
+            honorarios = 4200
+        )
+        universidadDeHurlingham = new Universidad(
+            provincia = [buenosAires],  //colocar una provincia en una lista
+            honorarios = 8800
+        )
+
+        //Profesionales
+        juana = new ProfesionalVinculado(
+            universidad = universidadDeRosario
+        )
+        melina = new ProfesionalLitoral(
+            universidad = universidadDeCorrientes
+        )
+        rocio = new ProfesionalLibre(
+            universidad = universidadDeHurlingham,
+            honorarios = 5000,
+            provincias = [santaFe, cordoba, buenosAires]
+        )
+        luciana = new ProfesionalLibre(
+            universidad = universidadDeRosario,
+            honorarios = 3200,
+            provincias = [santaFe, entreRios]
+        )
+
+        //Empresa
+        nuevaEmpresa = new Empresa(honorarioDeReferencia = 3500)
+        nuevaEmpresa.contratarProfesionales([juana, melina, rocio, luciana])
+    }
+    test "test 1 de cuantosprofesionalesSonDe" {
+        assert.equals(2, nuevaEmpresa.cuantosProfesionalesSonDe(universidadDeRosario))
+    }
+    test "test 2 de cuantosprofesionalesSonDe" {
+        assert.equals(1, nuevaEmpresa.cuantosProfesionalesSonDe(universidadDeHurlingham))
+    }
+    test "test 3 de cuantosprofesionalesSonDe" {
+        assert.equals(0, nuevaEmpresa.cuantosProfesionalesSonDe(universidadDeSanMartin))
+    }
+    test "test de conjuntoDeProfesionalesCaros" {
+        assert.equals(#{rocio}, nuevaEmpresa.conjuntoDeProfesionalesCaros())
+    }
+    test "test de conjuntoDeUniversidadesFormadoras" {
+        assert.equals(#{universidadDeRosario, universidadDeCorrientes, universidadDeHurlingham},
+        nuevaEmpresa.conjuntoDeUniversidadesFormadoras())
+    }
+    test "test de profesionalMasBarato" {
+        assert.equals(juana, nuevaEmpresa.profesionalMasBarato())
+    }
+    test "test de genete acotada" {
+        assert.notThat(nuevaEmpresa.esDeGenteAcotada())
+    }
 }
